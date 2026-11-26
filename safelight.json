@@ -1,7 +1,7 @@
 {
   "id": "colour-mapping",
   "name": "Colour Mapping",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Moves one photo's colour palette and spread of tones onto another. Set a photo as the colour source, then match any other photo to it in Develop, or a whole selection from the Library.",
   "author": "Anthony Reimche",
   "main": "dist/index.js",

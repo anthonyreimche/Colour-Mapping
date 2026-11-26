@@ -1,7 +1,7 @@
 {
   "name": "safelight-colour-mapping",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Colour Mapping extension for Safelight: moves one photo's colour palette and spread of tones onto another.",
   "type": "module",
   "scripts": {

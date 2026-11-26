@@ -13,9 +13,9 @@ import { EXT_ID, MENU_ID, PANEL_ID, STAGE_ID, TITLE, rederivePatch } from "./par
 import { initRuntime } from "./rt";
 import type { DevelopState, SafelightAPI } from "./safelight";
 import { colourMappingStage } from "./stage";
-import { SOURCE_SETTING, initStore, readAppSource, store } from "./store";
+import { SOURCE_SETTING, initStore, readAppSource, readReference, store } from "./store";
 import { Tables } from "./textures";
-import { initWorkflow, matchPhotos } from "./workflow";
+import { REFERENCE_VARIABLE, initWorkflow, matchPhotos } from "./workflow";
 
 export { EXT_ID, PANEL_ID };
 
@@ -54,6 +54,8 @@ export function activate(api: SafelightAPI): void {
     api.settings.onChange((key, value) => {
       if (key === SOURCE_SETTING) store().getState().setSource(readAppSource(value));
     }),
+    // The reference photo Reference View shows, for Match to reference.
+    api.variables.subscribe<unknown>(REFERENCE_VARIABLE, (snapshot) => store().getState().setReference(readReference(snapshot.value))),
     // A bag whose draw count disagrees with its edit (a paste or a preset
     // that carried the switch without a target) is put right live.
     api.stores.useDevelopStore.subscribe((state: DevelopState, prev: DevelopState) => {

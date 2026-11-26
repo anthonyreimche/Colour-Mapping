@@ -11,7 +11,7 @@ import { DEFAULT_SETTINGS, RANGES, type Clusters, type NumericSetting } from "./
 import { LABELS, TITLE, clustersPatch, readEdit, resetPatch, settingsPatch, type Edit } from "./params";
 import { React, api } from "./rt";
 import { store } from "./store";
-import { matchToSource, setAsSource } from "./workflow";
+import { matchToReference, matchToSource, setAsSource } from "./workflow";
 
 const TIPS: Readonly<Record<"on" | NumericSetting, string>> = {
   on: "Switch the colour transfer on or off",
@@ -68,6 +68,7 @@ export function ColourMappingPanel() {
   const photoId = api.stores.useDevelopStore((s) => s.photoId);
   const source = store()((s) => s.source);
   const busy = store()((s) => s.busy);
+  const reference = store()((s) => s.reference);
   const e = readEdit(bag);
   const matched = e.source.weight.some((w) => w > 0);
 
@@ -133,6 +134,17 @@ export function ColourMappingPanel() {
           {busy === "match" ? "Analysing…" : "Match to source"}
         </Button>
       </Row>
+      {reference && photoId && reference.photoId !== photoId && (
+        <Button
+          size="sm"
+          full
+          disabled={busy !== null}
+          title={`Use ${reference.name} as the colour source and match this photo to it`}
+          onClick={() => void matchToReference()}
+        >
+          Match to reference
+        </Button>
+      )}
       {slider("clusters", setClusters)}
       {slider("dominance", setting("dominance"))}
       {slider("equalization", setting("equalization"))}

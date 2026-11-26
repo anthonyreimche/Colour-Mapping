@@ -14,6 +14,10 @@ import { SOURCE_SETTING, store, type AppSource } from "./store";
 import type { Tables } from "./textures";
 
 export const MATCH_LABEL = `${TITLE}: match to source`;
+export const REFERENCE_LABEL = `${TITLE}: match to reference`;
+
+/** The shared variable Reference View names its reference photo in. */
+export const REFERENCE_VARIABLE = "reference.photo";
 
 let tables: Tables | null = null;
 
@@ -88,20 +92,46 @@ async function storeTarget(photoId: string, source: AppSource, target: FrameAnal
   ]);
 }
 
+/** Analyses the open photo as the target and matches it to `source`, as one
+ *  undo step labelled `label`. */
+async function matchOpen(photoId: string, source: AppSource, label: string): Promise<void> {
+  const frame = await captureOpen(photoId);
+  if (!frame) return;
+  const target = await analyseFrame(frame, source.n);
+  if (develop().photoId !== photoId) return;
+  await storeTarget(photoId, source, target, true);
+  if (develop().photoId !== photoId) return;
+  develop().setDynParams(matchPatch(readEdit(develop().paramBag), source, target.clusters));
+  await develop().commitEdit(label);
+}
+
 /** Analyses the open photo as the target and matches it to the colour source. */
 export function matchToSource(): Promise<void> {
   return busyWith("match", async () => {
     const source = store().getState().source;
     const photoId = develop().photoId;
     if (!source || !photoId) return;
-    const frame = await captureOpen(photoId);
-    if (!frame) return;
-    const target = await analyseFrame(frame, source.n);
-    if (develop().photoId !== photoId) return;
-    await storeTarget(photoId, source, target, true);
-    if (develop().photoId !== photoId) return;
-    develop().setDynParams(matchPatch(readEdit(develop().paramBag), source, target.clusters));
-    await develop().commitEdit(MATCH_LABEL);
+    await matchOpen(photoId, source, MATCH_LABEL);
+  });
+}
+
+/** Takes the reference photo, as its stored edit draws it, as the colour
+ *  source at the open photo's cluster count, then matches the open photo to
+ *  it. Nothing changes when the reference can't be read. */
+export function matchToReference(): Promise<void> {
+  return busyWith("match", async () => {
+    const reference = store().getState().reference;
+    const photoId = develop().photoId;
+    if (!reference || !photoId || reference.photoId === photoId) return;
+    const n = readEdit(develop().paramBag).clusters;
+    const { params, bag } = await storedEdit(reference.photoId);
+    const frame = await api.develop.renderPhotoFloatFrame(reference.photoId, params, { ...CAPTURE, paramBag: { ...bag, ...ANALYSIS_BAG } });
+    if (!frame || develop().photoId !== photoId) return;
+    const source: AppSource = { ...asSource(n, await analyseFrame(frame, n)), photoId: reference.photoId, name: reference.name };
+    held().rememberSource(source.hist);
+    api.settings.set(SOURCE_SETTING, source);
+    store().getState().setSource(source);
+    await matchOpen(photoId, source, REFERENCE_LABEL);
   });
 }
 

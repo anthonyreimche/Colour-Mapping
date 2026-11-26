@@ -37,10 +37,25 @@ export function readAppSource(value: unknown): AppSource | null {
 
 export type Busy = "source" | "match" | "batch" | null;
 
+/** A reference photo another extension shows beside the open one. */
+export interface Reference {
+  photoId: string;
+  name: string;
+}
+
+/** A shared "reference.photo" value as a reference; anything else is none. */
+export function readReference(value: unknown): Reference | null {
+  if (typeof value !== "object" || value === null) return null;
+  const { photoId, name } = value as Partial<Record<keyof Reference, unknown>>;
+  return typeof photoId === "string" && typeof name === "string" ? { photoId, name } : null;
+}
+
 export interface ColourMappingUi {
   source: AppSource | null;
   busy: Busy;
+  reference: Reference | null;
   setSource(source: AppSource | null): void;
+  setReference(reference: Reference | null): void;
   setBusy(busy: Busy): void;
 }
 
@@ -50,7 +65,9 @@ export function initStore(): void {
   instance = api.stores.create<ColourMappingUi>()((set) => ({
     source: readAppSource(api.settings.get<unknown>(SOURCE_SETTING, null)),
     busy: null,
+    reference: null,
     setSource: (source) => set({ source }),
+    setReference: (reference) => set({ reference }),
     setBusy: (busy) => set({ busy }),
   }));
 }

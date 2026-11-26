@@ -89,7 +89,7 @@ describe("activate", () => {
   // catalog.applyBagPatch and r16f textures came in 3.2.8.
   it("keeps the manifest and package versions in step, and needs the core its API calls came in", () => {
     expect(pkg.version).toBe(manifest.version);
-    expect(manifest.version).toBe("1.0.0");
+    expect(manifest.version).toBe("1.1.0");
     expect(manifest.minAppVersion).toBe("3.2.8");
     expect(manifest.license).toBe("GPL-3.0-or-later");
     expect(pkg.keywords).toContain("safelight-extension");

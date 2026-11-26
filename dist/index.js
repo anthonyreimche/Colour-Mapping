@@ -280,7 +280,7 @@ var _e = (e) => Math.floor(2 * e) + 4, ve = (e) => Math.ceil(_e(e) / 24), ye = (
 	dominance: "Colour dominance",
 	equalization: "Histogram equalisation"
 }, N = (e) => `${w}.${e}`, P = (e) => typeof e == "number" && Number.isFinite(e);
-function F(e, t) {
+function ke(e, t) {
 	let n = Array(t).fill(0);
 	if (!Array.isArray(e)) return n;
 	for (let r = 0; r < t && r < e.length; r++) {
@@ -289,12 +289,12 @@ function F(e, t) {
 	}
 	return n;
 }
-var ke = (e, t) => ({
-	mean: F(e[N(t.mean)], 10),
-	sd: F(e[N(t.sd)], 10),
-	weight: F(e[N(t.weight)], 5)
+var Ae = (e, t) => ({
+	mean: ke(e[N(t.mean)], 10),
+	sd: ke(e[N(t.sd)], 10),
+	weight: ke(e[N(t.weight)], 5)
 });
-function I(e) {
+function F(e) {
 	let t = { ...h }, n = e[N("on")];
 	typeof n == "boolean" ? t.on = n : P(n) && (t.on = n >= .5);
 	for (let n of Te) {
@@ -305,25 +305,25 @@ function I(e) {
 	let r = e[N(k)];
 	return {
 		...t,
-		source: ke(e, D),
-		target: ke(e, O),
+		source: Ae(e, D),
+		target: Ae(e, O),
 		sourceHist: typeof r == "string" ? r : ""
 	};
 }
-var Ae = (e) => Math.fround(e / 100) > Math.fround(.001), L = (e) => e.on && Ae(e.equalization) && oe(e.source) && oe(e.target) ? xe : 0, R = (e, t) => Array.from({ length: t }, (t, n) => n < e.length ? e[n] : 0);
-function z(e, t) {
+var je = (e) => Math.fround(e / 100) > Math.fround(.001), Me = (e) => e.on && je(e.equalization) && oe(e.source) && oe(e.target) ? xe : 0, I = (e, t) => Array.from({ length: t }, (t, n) => n < e.length ? e[n] : 0);
+function L(e, t) {
 	return {
-		[N(t.mean)]: R(e.mean, 10),
-		[N(t.sd)]: R(e.sd, 10),
-		[N(t.weight)]: R(e.weight, 5)
+		[N(t.mean)]: I(e.mean, 10),
+		[N(t.sd)]: I(e.sd, 10),
+		[N(t.weight)]: I(e.weight, 5)
 	};
 }
-function je(e, t) {
+function Ne(e, t) {
 	let n = {};
 	for (let r of t) n[N(r)] = e[r];
-	return n[N(E)] = L(e), n;
+	return n[N(E)] = Me(e), n;
 }
-function B(e, t, n) {
+function R(e, t, n) {
 	let r = {
 		...e,
 		on: !0,
@@ -335,61 +335,61 @@ function B(e, t, n) {
 	return {
 		[N("on")]: !0,
 		[N("clusters")]: t.n,
-		...z(t.clusters, D),
+		...L(t.clusters, D),
 		[N(k)]: t.hist,
 		[N(A)]: b(t.hist),
-		...z(n, O),
-		[N(E)]: L(r)
+		...L(n, O),
+		[N(E)]: Me(r)
 	};
 }
-var Me = {
+var Pe = {
 	mean: [],
 	sd: [],
 	weight: []
 };
-function Ne(e) {
+function Fe(e) {
 	return {
 		[N("clusters")]: e,
 		[N("on")]: !1,
-		...z(Me, D),
-		...z(Me, O),
+		...L(Pe, D),
+		...L(Pe, O),
 		[N(k)]: "",
 		[N(A)]: "",
 		[N(E)]: 0
 	};
 }
-var Pe = () => ({
-	...Ne(h.clusters),
+var Ie = () => ({
+	...Fe(h.clusters),
 	[N("dominance")]: h.dominance,
 	[N("equalization")]: h.equalization
-}), Fe = [
+}), Le = [
 	...we,
 	E,
 	...Object.values(D),
 	...Object.values(O)
 ];
-function Ie(e) {
-	if (!Fe.some((t) => N(t) in e)) return null;
-	let t = L(I(e)), n = e[N(E)];
+function Re(e) {
+	if (!Le.some((t) => N(t) in e)) return null;
+	let t = Me(F(e)), n = e[N(E)];
 	return (P(n) ? n : 0) === t ? null : { [N(E)]: t };
 }
 //#endregion
 //#region src/rt.ts
-var V, H;
-function Le(e) {
-	H = e, V = e.react;
+var z, B;
+function ze(e) {
+	B = e, z = e.react;
 }
 //#endregion
 //#region src/store.ts
-var Re = "source", U = (e, t) => Array.isArray(e) && e.length === t && e.every((e) => typeof e == "number" && Number.isFinite(e));
-function ze(e) {
+var V = "source", H = (e, t) => Array.isArray(e) && e.length === t && e.every((e) => typeof e == "number" && Number.isFinite(e));
+function Be(e) {
 	if (typeof e != "object" || !e) return null;
 	let t = e, n = t.n;
 	if (typeof n != "number" || !Number.isInteger(n) || n < 1 || n > 5 || typeof t.photoId != "string" || typeof t.name != "string" || typeof t.hist != "string" || y(t.hist) === null) return null;
 	let r = t.clusters;
 	if (typeof r != "object" || !r) return null;
 	let { mean: i, sd: a, weight: o } = r;
-	return !U(i, 2 * n) || !U(a, 2 * n) || !U(o, n) ? null : {
+	return !H(i, 2 * n) || !H(a, 2 * n) || !H(o, n) ? null : {
 		photoId: t.photoId,
 		name: t.name,
 		n,
@@ -401,33 +401,43 @@ function ze(e) {
 		}
 	};
 }
-var W = null;
-function Be() {
-	W = H.stores.create()((e) => ({
-		source: ze(H.settings.get(Re, null)),
+function Ve(e) {
+	if (typeof e != "object" || !e) return null;
+	let { photoId: t, name: n } = e;
+	return typeof t == "string" && typeof n == "string" ? {
+		photoId: t,
+		name: n
+	} : null;
+}
+var U = null;
+function He() {
+	U = B.stores.create()((e) => ({
+		source: Be(B.settings.get(V, null)),
 		busy: null,
+		reference: null,
 		setSource: (t) => e({ source: t }),
+		setReference: (t) => e({ reference: t }),
 		setBusy: (t) => e({ busy: t })
 	}));
 }
-function G() {
-	if (!W) throw Error("Colour Mapping's store is used before activate()");
-	return W;
+function W() {
+	if (!U) throw Error("Colour Mapping's store is used before activate()");
+	return U;
 }
 //#endregion
 //#region src/analysis.ts
-var Ve = {
+var Ue = {
 	[N("on")]: !1,
 	[N(A)]: Oe,
 	[N(j)]: Oe
-}, He = {
+}, We = {
 	point: "pre-output",
 	space: {
 		encoding: "linear",
 		primaries: "rec709"
 	}
-}, Ue = () => new Promise((e) => setTimeout(e, 0));
-async function We(e, t) {
+}, Ge = () => new Promise((e) => setTimeout(e, 0));
+async function G(e, t) {
 	let n = e.width * e.height, r = d(e.data), i = re(r, n), a = ae(r, n, t);
 	for (;;) {
 		let e = a.next();
@@ -435,117 +445,139 @@ async function We(e, t) {
 			hist: i,
 			clusters: e.value
 		};
-		await Ue();
+		await Ge();
 	}
 }
-var Ge = (e, t) => ({
+var Ke = (e, t) => ({
 	n: e,
 	clusters: t.clusters,
 	hist: le(ie(t.hist))
-}), Ke = `${T}: match to source`, qe = null;
-function Je(e) {
-	qe = e;
-	let t = G().getState().source;
+}), qe = `${T}: match to source`, Je = `${T}: match to reference`, Ye = "reference.photo", Xe = null;
+function Ze(e) {
+	Xe = e;
+	let t = W().getState().source;
 	t && e.rememberSource(t.hist);
 }
-function Ye() {
-	if (!qe) throw Error("Colour Mapping's workflow is used before activate()");
-	return qe;
+function Qe() {
+	if (!Xe) throw Error("Colour Mapping's workflow is used before activate()");
+	return Xe;
 }
-var K = () => H.stores.useDevelopStore.getState(), Xe = (e) => H.stores.useCatalogStore.getState().photos.find((t) => t.id === e)?.filename ?? "the source photo";
-async function Ze(e) {
-	let t = await H.develop.captureFloatFrame(K().params, {
-		...He,
-		paramBag: { ...Ve },
+var K = () => B.stores.useDevelopStore.getState(), $e = (e) => B.stores.useCatalogStore.getState().photos.find((t) => t.id === e)?.filename ?? "the source photo";
+async function et(e) {
+	let t = await B.develop.captureFloatFrame(K().params, {
+		...We,
+		paramBag: { ...Ue },
 		maxEdge: 640
 	});
 	return t && K().photoId === e ? t : null;
 }
-async function Qe(e, t) {
-	if (!G().getState().busy) {
-		G().getState().setBusy(e);
+async function q(e, t) {
+	if (!W().getState().busy) {
+		W().getState().setBusy(e);
 		try {
 			return await t();
 		} catch (e) {
-			console.warn("[colour-mapping]", e), H.ui.notify({
+			console.warn("[colour-mapping]", e), B.ui.notify({
 				message: `${T} couldn't analyse the photo.`,
 				tone: "error"
 			});
 			return;
 		} finally {
-			G().getState().setBusy(null);
+			W().getState().setBusy(null);
 		}
 	}
 }
-function $e() {
-	return Qe("source", async () => {
+function tt() {
+	return q("source", async () => {
 		let e = K().photoId;
 		if (!e) return;
-		let t = I(K().paramBag).clusters, n = await Ze(e);
+		let t = F(K().paramBag).clusters, n = await et(e);
 		if (!n) return;
 		let r = {
-			...Ge(t, await We(n, t)),
+			...Ke(t, await G(n, t)),
 			photoId: e,
-			name: Xe(e)
+			name: $e(e)
 		};
-		Ye().rememberSource(r.hist), H.settings.set(Re, r), G().getState().setSource(r);
+		Qe().rememberSource(r.hist), B.settings.set(V, r), W().getState().setSource(r);
 	});
 }
-async function et(e, t, n, r) {
-	let i = Ye();
-	i.setTarget(e, n.hist), H.develop.putPhotoData(De, se(n.hist), r ? void 0 : e);
+async function nt(e, t, n, r) {
+	let i = Qe();
+	i.setTarget(e, n.hist), B.develop.putPhotoData(De, se(n.hist), r ? void 0 : e);
 	let a = i.rememberSource(t.hist);
-	r && await Promise.all([H.prepareStageTextureVariant(w, A, a).catch(() => void 0), H.prepareStageTextureVariant(w, j, e).catch(() => void 0)]);
+	r && await Promise.all([B.prepareStageTextureVariant(w, A, a).catch(() => void 0), B.prepareStageTextureVariant(w, j, e).catch(() => void 0)]);
 }
-function tt() {
-	return Qe("match", async () => {
-		let e = G().getState().source, t = K().photoId;
-		if (!e || !t) return;
-		let n = await Ze(t);
-		if (!n) return;
-		let r = await We(n, e.n);
-		K().photoId === t && (await et(t, e, r, !0), K().photoId === t && (K().setDynParams(B(I(K().paramBag), e, r.clusters)), await K().commitEdit(Ke)));
+async function rt(e, t, n) {
+	let r = await et(e);
+	if (!r) return;
+	let i = await G(r, t.n);
+	K().photoId === e && (await nt(e, t, i, !0), K().photoId === e && (K().setDynParams(R(F(K().paramBag), t, i.clusters)), await K().commitEdit(n)));
+}
+function it() {
+	return q("match", async () => {
+		let e = W().getState().source, t = K().photoId;
+		e && t && await rt(t, e, qe);
 	});
 }
-async function nt(e) {
-	let t = await H.catalog.getEditState(e), n = t && t.stack.length > 0 ? t.stack[Math.min(Math.max(t.currentIndex, 0), t.stack.length - 1)] : null;
+function at() {
+	return q("match", async () => {
+		let e = W().getState().reference, t = K().photoId;
+		if (!e || !t || e.photoId === t) return;
+		let n = F(K().paramBag).clusters, { params: r, bag: i } = await ot(e.photoId), a = await B.develop.renderPhotoFloatFrame(e.photoId, r, {
+			...We,
+			paramBag: {
+				...i,
+				...Ue
+			}
+		});
+		if (!a || K().photoId !== t) return;
+		let o = {
+			...Ke(n, await G(a, n)),
+			photoId: e.photoId,
+			name: e.name
+		};
+		Qe().rememberSource(o.hist), B.settings.set(V, o), W().getState().setSource(o), await rt(t, o, Je);
+	});
+}
+async function ot(e) {
+	let t = await B.catalog.getEditState(e), n = t && t.stack.length > 0 ? t.stack[Math.min(Math.max(t.currentIndex, 0), t.stack.length - 1)] : null;
 	if (n) return {
 		params: n.params,
 		bag: n.paramBag ?? {}
 	};
-	let r = H.stores.useCatalogStore.getState().photos.find((t) => t.id === e);
+	let r = B.stores.useCatalogStore.getState().photos.find((t) => t.id === e);
 	return {
-		params: H.develop.normalizeParams({ temperature: r?.exif.colorTemperature }),
+		params: B.develop.normalizeParams({ temperature: r?.exif.colorTemperature }),
 		bag: {}
 	};
 }
-async function rt(e, t) {
+async function st(e, t) {
 	let { params: n, bag: r } = K().photoId === e ? {
 		params: K().params,
 		bag: K().paramBag
-	} : await nt(e), i = await H.develop.renderPhotoFloatFrame(e, n, {
-		...He,
+	} : await ot(e), i = await B.develop.renderPhotoFloatFrame(e, n, {
+		...We,
 		paramBag: {
 			...r,
-			...Ve
+			...Ue
 		}
 	});
 	if (!i) return !1;
-	let a = await We(i, t.n), o = K().photoId === e;
-	return await et(e, t, a, o), o && K().photoId === e ? (K().setDynParams(B(I(K().paramBag), t, a.clusters)), await K().commitEdit(Ke)) : await H.catalog.applyBagPatch(e, B(I(r), t, a.clusters), Ke), !0;
+	let a = await G(i, t.n), o = K().photoId === e;
+	return await nt(e, t, a, o), o && K().photoId === e ? (K().setDynParams(R(F(K().paramBag), t, a.clusters)), await K().commitEdit(qe)) : await B.catalog.applyBagPatch(e, R(F(r), t, a.clusters), qe), !0;
 }
-var q = (e) => e === 1 ? "1 photo" : `${e} photos`;
-function it(e) {
-	return Qe("batch", async () => {
-		let t = G().getState().source;
+var J = (e) => e === 1 ? "1 photo" : `${e} photos`;
+function ct(e) {
+	return q("batch", async () => {
+		let t = W().getState().source;
 		if (!t || e.length === 0) return;
-		let n = H.ui.notify({
-			message: `Matching ${q(e.length)} to ${t.name}`,
+		let n = B.ui.notify({
+			message: `Matching ${J(e.length)} to ${t.name}`,
 			progress: 0
 		}), r = 0;
 		for (let [i, a] of e.entries()) {
 			try {
-				await rt(a, t) || r++;
+				await st(a, t) || r++;
 			} catch (e) {
 				console.warn(`[colour-mapping] ${a}:`, e), r++;
 			}
@@ -553,7 +585,7 @@ function it(e) {
 		}
 		let i = e.length - r;
 		n.update({
-			message: r === 0 ? `Matched ${q(i)} to ${t.name}` : `Matched ${q(i)}; ${q(r)} couldn't be read`,
+			message: r === 0 ? `Matched ${J(i)} to ${t.name}` : `Matched ${J(i)}; ${J(r)} couldn't be read`,
 			tone: r === 0 ? "success" : "warning",
 			progress: null
 		});
@@ -561,29 +593,29 @@ function it(e) {
 }
 //#endregion
 //#region src/Panel.tsx
-var at = {
+var lt = {
 	on: "Switch the colour transfer on or off",
 	clusters: "Number of clusters to find in the photo. Changing it resets all clusters",
 	dominance: "How clusters are mapped, in percent. Low values: based on colour proximity, high values: based on colour dominance",
 	equalization: "Level of histogram equalisation, in percent"
-}, ot = "The colour source's clusters: each block is one cluster, its average colour in the centre and its spread around it", st = "This photo's clusters, as the last match found them", ct = 53.390011;
-function lt({ clusters: e, n: t, title: n }) {
-	let { tokens: r } = H.ui, i = [];
+}, ut = "The colour source's clusters: each block is one cluster, its average colour in the centre and its spread around it", dt = "This photo's clusters, as the last match found them", ft = 53.390011;
+function pt({ clusters: e, n: t, title: n }) {
+	let { tokens: r } = B.ui, i = [];
 	for (let n = 0; n < t; n++) {
 		let t = [];
 		for (let r = -1; r <= 1; r++) for (let i = -1; i <= 1; i++) {
 			let a = e.mean[2 * n] + i * e.sd[2 * n], o = e.mean[2 * n + 1] + r * e.sd[2 * n + 1];
-			t.push(/* @__PURE__ */ V.createElement("div", {
+			t.push(/* @__PURE__ */ z.createElement("div", {
 				key: `${i},${r}`,
 				"data-swatch": "",
 				style: { background: p([
-					ct,
+					ft,
 					a,
 					o
 				]) }
 			}));
 		}
-		i.push(/* @__PURE__ */ V.createElement("div", {
+		i.push(/* @__PURE__ */ z.createElement("div", {
 			key: n,
 			style: {
 				flex: 1,
@@ -594,7 +626,7 @@ function lt({ clusters: e, n: t, title: n }) {
 			}
 		}, t));
 	}
-	return /* @__PURE__ */ V.createElement("div", {
+	return /* @__PURE__ */ z.createElement("div", {
 		title: n,
 		style: {
 			display: "flex",
@@ -606,77 +638,83 @@ function lt({ clusters: e, n: t, title: n }) {
 		}
 	}, i);
 }
-var J = () => H.stores.useDevelopStore.getState();
-function ut(e, t) {
-	J().setDynParams(je(e, t));
+var Y = () => B.stores.useDevelopStore.getState();
+function mt(e, t) {
+	Y().setDynParams(Ne(e, t));
 }
-var dt = (e) => void J().commitEdit(`${T}: ${e}`);
-function ft() {
-	let { Slider: e } = H.components, { Button: t, Field: n, Row: r, Stack: i, Toggle: a } = H.ui, o = H.stores.useDevelopStore((e) => e.paramBag), s = H.stores.useDevelopStore((e) => e.photoId), c = G()((e) => e.source), l = G()((e) => e.busy), u = I(o), d = u.source.weight.some((e) => e > 0), f = (t, n) => {
+var ht = (e) => void Y().commitEdit(`${T}: ${e}`);
+function gt() {
+	let { Slider: e } = B.components, { Button: t, Field: n, Row: r, Stack: i, Toggle: a } = B.ui, o = B.stores.useDevelopStore((e) => e.paramBag), s = B.stores.useDevelopStore((e) => e.photoId), c = W()((e) => e.source), l = W()((e) => e.busy), u = W()((e) => e.reference), d = F(o), f = d.source.weight.some((e) => e > 0), p = (t, n) => {
 		let r = g[t];
-		return /* @__PURE__ */ V.createElement("div", {
+		return /* @__PURE__ */ z.createElement("div", {
 			key: t,
-			title: at[t]
-		}, /* @__PURE__ */ V.createElement(e, {
+			title: lt[t]
+		}, /* @__PURE__ */ z.createElement(e, {
 			label: M[t],
-			value: u[t],
+			value: d[t],
 			min: r.min,
 			max: r.max,
 			step: r.step,
 			defaultValue: h[t],
 			onChange: n,
-			onCommit: () => dt(M[t].toLowerCase())
+			onCommit: () => ht(M[t].toLowerCase())
 		}));
-	}, p = (e) => (t) => {
-		ut({
-			...I(J().paramBag),
+	}, m = (e) => (t) => {
+		mt({
+			...F(Y().paramBag),
 			[e]: Math.min(Math.max(t, g[e].min), g[e].max),
 			on: !0
 		}, [e, "on"]);
-	}, m = (e) => {
+	}, _ = (e) => {
 		let t = Math.min(Math.max(Math.round(e), g.clusters.min), g.clusters.max);
-		t !== I(J().paramBag).clusters && J().setDynParams(Ne(t));
-	}, _ = c ? `Analyse this photo and match its colours to ${c.name}` : "Use a photo as the colour source first";
-	return /* @__PURE__ */ V.createElement(i, {
+		t !== F(Y().paramBag).clusters && Y().setDynParams(Fe(t));
+	}, v = c ? `Analyse this photo and match its colours to ${c.name}` : "Use a photo as the colour source first";
+	return /* @__PURE__ */ z.createElement(i, {
 		gap: 6,
 		style: { padding: 8 }
-	}, /* @__PURE__ */ V.createElement("div", { title: at.on }, /* @__PURE__ */ V.createElement(a, {
-		checked: u.on,
+	}, /* @__PURE__ */ z.createElement("div", { title: lt.on }, /* @__PURE__ */ z.createElement(a, {
+		checked: d.on,
 		label: M.on,
 		onChange: (e) => {
-			ut({
-				...I(J().paramBag),
+			mt({
+				...F(Y().paramBag),
 				on: e
-			}, ["on"]), dt(e ? "on" : "off");
+			}, ["on"]), ht(e ? "on" : "off");
 		}
-	})), /* @__PURE__ */ V.createElement(n, { label: "Source clusters" }, /* @__PURE__ */ V.createElement(lt, {
-		clusters: d || !c ? u.source : c.clusters,
-		n: d || !c ? u.clusters : c.n,
-		title: ot
-	})), /* @__PURE__ */ V.createElement(n, { label: "Target clusters" }, /* @__PURE__ */ V.createElement(lt, {
-		clusters: u.target,
-		n: u.clusters,
-		title: st
-	})), /* @__PURE__ */ V.createElement(r, { gap: 6 }, /* @__PURE__ */ V.createElement(t, {
+	})), /* @__PURE__ */ z.createElement(n, { label: "Source clusters" }, /* @__PURE__ */ z.createElement(pt, {
+		clusters: f || !c ? d.source : c.clusters,
+		n: f || !c ? d.clusters : c.n,
+		title: ut
+	})), /* @__PURE__ */ z.createElement(n, { label: "Target clusters" }, /* @__PURE__ */ z.createElement(pt, {
+		clusters: d.target,
+		n: d.clusters,
+		title: dt
+	})), /* @__PURE__ */ z.createElement(r, { gap: 6 }, /* @__PURE__ */ z.createElement(t, {
 		size: "sm",
 		full: !0,
 		disabled: !s || l !== null,
 		title: "Analyse this photo as the colour source",
-		onClick: () => void $e()
-	}, l === "source" ? "Analysing…" : "Use as source"), /* @__PURE__ */ V.createElement(t, {
+		onClick: () => void tt()
+	}, l === "source" ? "Analysing…" : "Use as source"), /* @__PURE__ */ z.createElement(t, {
 		size: "sm",
 		full: !0,
 		disabled: !s || !c || l !== null,
-		title: _,
-		onClick: () => void tt()
-	}, l === "match" ? "Analysing…" : "Match to source")), f("clusters", m), f("dominance", p("dominance")), f("equalization", p("equalization")));
+		title: v,
+		onClick: () => void it()
+	}, l === "match" ? "Analysing…" : "Match to source")), u && s && u.photoId !== s && /* @__PURE__ */ z.createElement(t, {
+		size: "sm",
+		full: !0,
+		disabled: l !== null,
+		title: `Use ${u.name} as the colour source and match this photo to it`,
+		onClick: () => void at()
+	}, "Match to reference"), p("clusters", _), p("dominance", m("dominance")), p("equalization", m("equalization")));
 }
-function pt() {
-	J().setDynParams(Pe()), dt("reset");
+function _t() {
+	Y().setDynParams(Ie()), ht("reset");
 }
 //#endregion
 //#region src/glsl.ts
-function mt(e) {
+function vt(e) {
 	let t = e.toPrecision(10);
 	if (/e/i.test(t)) {
 		let [e, n] = t.split(/e/i);
@@ -684,7 +722,7 @@ function mt(e) {
 	}
 	return t.includes(".") ? t.replace(/0+$/, "").replace(/\.$/, ".0") : `${t}.0`;
 }
-var Y = mt, ht = (e) => `mat3(${[
+var X = vt, yt = (e) => `mat3(${[
 	0,
 	1,
 	2
@@ -692,48 +730,48 @@ var Y = mt, ht = (e) => `mat3(${[
 	0,
 	1,
 	2
-].map((n) => Y(e[n][t]))).join(", ")})`, gt = `vec3(${a.map(Y).join(", ")})`, _t = `
+].map((n) => X(e[n][t]))).join(", ")})`, bt = `vec3(${a.map(X).join(", ")})`, xt = `
 float cmCbrt(float v) {
   float r = exp2(log2(v) / 3.0);
   return r - (r * r * r - v) / (3.0 * r * r);
 }
 float cmLabF(float t) {
-  return t > ${Y(i)} ? cmCbrt(t) : (${Y(r)} * t + 16.0) / 116.0;
+  return t > ${X(i)} ? cmCbrt(t) : (${X(r)} * t + 16.0) / 116.0;
 }
-`, vt = `${_t}
+`, St = `${xt}
 float cmLightness(vec3 rgb) {
-  return 116.0 * cmLabF(dot(vec3(${e[1].map(Y).join(", ")}), rgb)) - 16.0;
+  return 116.0 * cmLabF(dot(vec3(${e[1].map(X).join(", ")}), rgb)) - 16.0;
 }
-`, yt = `
+`, Ct = `
 float cmBin(float L) {
-  float q = floor(L * ${Y(m / 100)});
-  if (L < q * ${Y(100 / m)}) q -= 1.0;
-  else if (L >= (q + 1.0) * ${Y(100 / m)}) q += 1.0;
-  return min(max(q, 0.0), ${Y(m - 1)});
+  float q = floor(L * ${X(m / 100)});
+  if (L < q * ${X(100 / m)}) q -= 1.0;
+  else if (L >= (q + 1.0) * ${X(100 / m)}) q += 1.0;
+  return min(max(q, 0.0), ${X(m - 1)});
 }
 float cmShift(float L) {
-  float t = texelFetch(${j}, ivec2(int(cmBin(L)), 0), 0).r * ${Y(m)} - 1.0;
+  float t = texelFetch(${j}, ivec2(int(cmBin(L)), 0), 0).r * ${X(m)} - 1.0;
   if (t < 0.0) return -1.0;
-  float k = texelFetch(${A}, ivec2(int(t), 0), 0).r * ${Y(m)} - 1.0;
+  float k = texelFetch(${A}, ivec2(int(t), 0), 0).r * ${X(m)} - 1.0;
   if (k < 0.0) return -1.0;
   float e = equalization / 100.0;
-  float ih = k * 100.0 / ${Y(m)};
+  float ih = k * 100.0 / ${X(m)};
   return min(max(0.5 * ((L * (1.0 - e) + ih * e) - L) + 50.0, 0.0), 100.0);
 }
-`, bt = `${_t}${yt}
+`, wt = `${xt}${Ct}
 float cmLabFInv(float f) {
-  return f > ${Y(6 / 29)} ? f * f * f : (116.0 * f - 16.0) / ${Y(r)};
+  return f > ${X(6 / 29)} ? f * f * f : (116.0 * f - 16.0) / ${X(r)};
 }
 vec3 cmToLab(vec3 rgb) {
-  vec3 xyz = ${ht(e)} * rgb / ${gt};
+  vec3 xyz = ${yt(e)} * rgb / ${bt};
   vec3 f = vec3(cmLabF(xyz.x), cmLabF(xyz.y), cmLabF(xyz.z));
   return vec3(116.0 * f.y - 16.0, 500.0 * (f.x - f.y), 200.0 * (f.y - f.z));
 }
 vec3 cmFromLab(vec3 lab) {
   float fy = (lab.x + 16.0) / 116.0;
   vec3 f = vec3(fy + lab.y / 500.0, fy, fy - lab.z / 200.0);
-  vec3 xyz = vec3(cmLabFInv(f.x), cmLabFInv(f.y), cmLabFInv(f.z)) * ${gt};
-  return ${ht(n)} * xyz;
+  vec3 xyz = vec3(cmLabFInv(f.x), cmLabFInv(f.y), cmLabFInv(f.z)) * ${bt};
+  return ${yt(n)} * xyz;
 }
 // get_clusters(): the pixel's share of target cluster c, unnormalized, by
 // inverse squared distance; a cluster it sits on takes it whole.
@@ -805,7 +843,7 @@ vec3 cmTransfer(vec3 rgb, bool smoothed, float delta) {
   }
   return cmFromLab(vec3(L, ab));
 }
-`, xt = "\nif (on) {\n  c.rgb = cmTransfer(c.rgb, blDraws > 0, blDraws > 0 ? stageResult.x + stageResult.y : 0.0);\n}\n", X = {
+`, Tt = "\nif (on) {\n  c.rgb = cmTransfer(c.rgb, blDraws > 0, blDraws > 0 ? stageResult.x + stageResult.y : 0.0);\n}\n", Z = {
 	idle: 0,
 	plan: 1,
 	splatX: 2,
@@ -814,19 +852,19 @@ vec3 cmTransfer(vec3 rgb, bool smoothed, float delta) {
 	blurY: 5,
 	slice: 6,
 	zero: 7
-}, St = `
+}, Et = `
 precision highp int;
 ${`
 float cmQuantize(float v) {
-  if (abs(v) < ${Y(2 ** -14)}) return 0.0;
+  if (abs(v) < ${X(2 ** -14)}) return 0.0;
   return uintBitsToFloat((floatBitsToUint(v) + 0x1000u) & 0xFFFFE000u);
 }
 float cmHalf(float v) {
-  if (abs(v) < ${Y(2 ** -14)}) return floor(v * ${Y(2 ** 24)} + 0.5) * ${Y(2 ** -24)};
+  if (abs(v) < ${X(2 ** -14)}) return floor(v * ${X(2 ** 24)} + 0.5) * ${X(2 ** -24)};
   return cmQuantize(v);
 }
 vec4 cmHalf4(vec4 v) { return vec4(cmHalf(v.x), cmHalf(v.y), cmHalf(v.z), cmHalf(v.w)); }
-`}${vt}${yt}
+`}${St}${Ct}
 // 2^e for a normal result; ldexp is GLSL ES 3.10.
 float cmPow2(int e) { return uintBitsToFloat(uint(e + 127) << 23); }
 ivec2 cmFrame() { return ivec2(floor(1.0 / uTexel + 0.5)); }
@@ -920,11 +958,11 @@ highp int cmGridTexels(ivec2 frame, ivec3 size) {
 vec4 cmPlan(ivec2 frame) {
   float longest = float(max(frame.x, frame.y));
   float source = max(uSourceSize.x, uSourceSize.y);
-  float s = max(source <= longest ? ${Y(50)} : cmDiv(${Y(50)}, cmDiv(source, longest)), 0.5);
+  float s = max(source <= longest ? ${X(50)} : cmDiv(${X(50)}, cmDiv(source, longest)), 0.5);
   for (int k = 0; k < 16; k++) {
-    vec4 sigmas = cmGridSigmas(frame, s, ${Y(8)});
+    vec4 sigmas = cmGridSigmas(frame, s, ${X(8)});
     if (cmGridTexels(frame, cmGridSize(frame, sigmas)) <= frame.x * frame.y) return sigmas;
-    s *= ${Y(fe)};
+    s *= ${X(fe)};
   }
   return vec4(0.0);
 }
@@ -940,17 +978,17 @@ int cmSteps(ivec3 size, float sigmaS) { return ((size.z + 3) / 4) * (2 * cmChunk
 // slice. darktable blurs the whole splat along x, then y: the same sums, as
 // both are linear and act on one axis each.
 void cmStep(int k, ivec2 frame, vec4 sigmas, out int kind, out int quad, out int chunk) {
-  kind = ${X.idle};
+  kind = ${Z.idle};
   quad = 0;
   chunk = 0;
   if (k == 0) {
-    kind = ${X.plan};
+    kind = ${Z.plan};
     return;
   }
   ivec3 size = cmGridSize(frame, sigmas);
   int steps = cmSteps(size, sigmas.x);
   if (sigmas.x == 0.0 || uPassCount < steps + 1) {
-    if (k == uPassCount - 1) kind = ${X.zero};
+    if (k == uPassCount - 1) kind = ${Z.zero};
     return;
   }
   int s = k - (uPassCount - steps);
@@ -961,10 +999,10 @@ void cmStep(int k, ivec2 frame, vec4 sigmas, out int kind, out int quad, out int
   if (s < splats) {
     quad = s / perQuad;
     int j = s - quad * perQuad;
-    kind = j < chunks ? ${X.splatX} : (j == chunks ? ${X.blurX} : ${X.splatY});
+    kind = j < chunks ? ${Z.splatX} : (j == chunks ? ${Z.blurX} : ${Z.splatY});
     chunk = j < chunks ? j : j - chunks - 1;
   } else {
-    kind = s == splats ? ${X.blurY} : ${X.slice};
+    kind = s == splats ? ${Z.blurY} : ${Z.slice};
   }
 }
 // The texels [from, to) a step writes.
@@ -974,16 +1012,16 @@ void cmStepRange(int kind, int quad, ivec2 frame, ivec3 size, out highp int from
   highp int grid = sx + size.x * frame.y;
   from = 0;
   to = 0;
-  if (kind == ${X.plan}) to = 4;
-  if (kind == ${X.splatX} || kind == ${X.blurX}) {
+  if (kind == ${Z.plan}) to = 4;
+  if (kind == ${Z.splatX} || kind == ${Z.blurX}) {
     from = sx;
     to = grid;
   }
-  if (kind == ${X.splatY}) {
+  if (kind == ${Z.splatY}) {
     from = grid + quad * nodes;
     to = from + nodes;
   }
-  if (kind == ${X.blurY}) {
+  if (kind == ${Z.blurY}) {
     from = grid;
     to = grid + nodes * ((size.z + 3) / 4);
   }
@@ -994,8 +1032,8 @@ ivec4 cmRegion() {
   vec4 sigmas = cmConstants();
   int kind, quad, chunk;
   cmStep(uPassIndex, frame, sigmas, kind, quad, chunk);
-  if (kind == ${X.idle}) return ivec4(0);
-  if (kind == ${X.slice} || kind == ${X.zero}) return ivec4(0, 0, frame);
+  if (kind == ${Z.idle}) return ivec4(0);
+  if (kind == ${Z.slice} || kind == ${Z.zero}) return ivec4(0, 0, frame);
   ivec3 size = cmGridSize(frame, sigmas);
   highp int from, to, before, after;
   cmStepRange(kind, quad, frame, size, from, to);
@@ -1118,51 +1156,51 @@ vec4 cmSlice(ivec2 frame, vec4 sigmas, ivec3 size, ivec2 q) {
   float norm = sigmas.z * 0.04;
   return cmResult(norm * (100.0 / (sigmas.x * sigmas.x)) * sum);
 }
-`, Z = {
+`, Q = {
 	plan: "c = cmPack(dot(cmPlan(frame), cmOneHot(q.x)));",
 	splatX: "c = cmHalf4((chunk == 0 ? vec4(0.0) : c) + cmSplatX(frame, sigmas, size, n - from, quad, chunk));",
 	splatY: "c = cmHalf4((chunk == 0 ? vec4(0.0) : c) + cmSplatY(frame, sigmas, size, n - from, chunk));",
 	blurX: "c = cmHalf4(cmBlur(frame, size, from, n - from, 0));",
 	blurY: "c = cmHalf4(cmBlur(frame, size, from, n - from, 1));",
 	slice: "c = cmSlice(frame, sigmas, size, q);"
-}, Ct = `
+}, Dt = `
 ivec2 frame = cmFrame();
 ivec2 q = ivec2(gl_FragCoord.xy);
 if (uPassIndex == 0) {
-  if (q.y == 0 && q.x < 4) ${Z.plan}
+  if (q.y == 0 && q.x < 4) ${Q.plan}
 } else {
   vec4 sigmas = cmConstants();
   int kind, quad, chunk;
   cmStep(uPassIndex, frame, sigmas, kind, quad, chunk);
   ivec3 size = cmGridSize(frame, sigmas);
-  if (kind == ${X.zero}) {
+  if (kind == ${Z.zero}) {
     c = vec4(0.0, 0.0, 0.0, 1.0);
-  } else if (kind == ${X.slice}) {
-    ${Z.slice}
-  } else if (kind != ${X.idle}) {
+  } else if (kind == ${Z.slice}) {
+    ${Q.slice}
+  } else if (kind != ${Z.idle}) {
     highp int from, to;
     cmStepRange(kind, quad, frame, size, from, to);
     highp int n = q.y * frame.x + q.x;
     if (n >= from && n < to) {
-      if (kind == ${X.splatX}) {
-        ${Z.splatX}
-      } else if (kind == ${X.splatY}) {
-        ${Z.splatY}
-      } else if (kind == ${X.blurX}) {
-        ${Z.blurX}
+      if (kind == ${Z.splatX}) {
+        ${Q.splatX}
+      } else if (kind == ${Z.splatY}) {
+        ${Q.splatY}
+      } else if (kind == ${Z.blurX}) {
+        ${Q.blurX}
       } else {
-        ${Z.blurY}
+        ${Q.blurY}
       }
     }
   }
 }
-`, wt = "return cmRegion();", Tt = {
+`, Ot = "return cmRegion();", kt = {
 	key: "equalization",
 	glslType: "float",
 	default: h.equalization,
 	range: { ...g.equalization },
 	label: M.equalization
-}, Et = (e, t, n) => [
+}, At = (e, t, n) => [
 	{
 		key: e.mean,
 		glslType: "vec2",
@@ -1193,7 +1231,7 @@ if (uPassIndex == 0) {
 		label: `${t} cluster sizes`,
 		computed: n
 	}
-], Dt = [
+], jt = [
 	{
 		key: "on",
 		glslType: "bool",
@@ -1214,15 +1252,15 @@ if (uPassIndex == 0) {
 		range: { ...g.dominance },
 		label: M.dominance
 	},
-	Tt,
+	kt,
 	{
 		key: E,
 		glslType: "int",
 		default: 0
 	},
-	...Et(D, "Source", !1),
-	...Et(O, "Target", !0)
-], Ot = [{
+	...At(D, "Source", !1),
+	...At(O, "Target", !0)
+], Mt = [{
 	key: A,
 	kind: "lut",
 	width: m,
@@ -1236,7 +1274,7 @@ if (uPassIndex == 0) {
 	format: "r16f",
 	perPhoto: !0
 }];
-function kt() {
+function Nt() {
 	return {
 		id: w,
 		name: "Colour Mapping",
@@ -1247,20 +1285,20 @@ function kt() {
 			encoding: "linear",
 			primaries: "rec709"
 		},
-		glsl: xt,
-		helpers: bt,
-		uniforms: Dt,
-		textures: Ot,
+		glsl: Tt,
+		helpers: wt,
+		uniforms: jt,
+		textures: Mt,
 		passes: [{
 			channels: 4,
-			glsl: Ct,
-			helpers: St,
-			region: wt,
+			glsl: Dt,
+			helpers: Et,
+			region: Ot,
 			iterations: {
 				key: E,
 				max: pe
 			},
-			uniforms: [Tt]
+			uniforms: [kt]
 		}],
 		dormantWhen: { on: !1 },
 		dataKeys: [...Ee]
@@ -1268,7 +1306,7 @@ function kt() {
 }
 //#endregion
 //#region src/textures.ts
-var At = class {
+var Pt = class {
 	host;
 	sources = /* @__PURE__ */ new Map();
 	targets = /* @__PURE__ */ new Map();
@@ -1309,45 +1347,49 @@ var At = class {
 		let n = await this.host.develop.getPhotoData(De, e), r = this.targets.get(e) ?? (n ? ce(n) : null);
 		return r ? (this.targets.set(e, r), this.texture(r)) : null;
 	}
-}, Q = null, $ = null, jt = [];
-function Mt(e) {
-	Le(e), Be(), Q = e, $ = new At(e), Je($), e.registerProcessingStage(kt()), $.register(), e.registerPanel({
+}, Ft = null, $ = null, It = [];
+function Lt(e) {
+	ze(e), He(), Ft = e, $ = new Pt(e), Ze($), e.registerProcessingStage(Nt()), $.register(), e.registerPanel({
 		id: Se,
 		title: T,
-		component: ft,
+		component: gt,
 		defaultDock: {
 			module: "develop",
 			direction: "right",
 			width: 268
 		},
-		onReset: pt,
+		onReset: _t,
 		ownsBag: [`${w}.`]
 	}), e.registerGridMenuItem({
 		id: Ce,
 		label: (e) => e.length > 1 ? `Match to colour source (${e.length})` : "Match to colour source",
-		enabled: () => G().getState().source !== null && G().getState().busy === null,
-		onClick: (e) => void it(e)
-	}), jt = [e.settings.onChange((e, t) => {
-		e === "source" && G().getState().setSource(ze(t));
-	}), e.stores.useDevelopStore.subscribe((e, t) => {
-		if (e.paramBag === t.paramBag) return;
-		let n = Ie(e.paramBag);
-		n && e.setDynParams(n);
-	})];
+		enabled: () => W().getState().source !== null && W().getState().busy === null,
+		onClick: (e) => void ct(e)
+	}), It = [
+		e.settings.onChange((e, t) => {
+			e === "source" && W().getState().setSource(Be(t));
+		}),
+		e.variables.subscribe(Ye, (e) => W().getState().setReference(Ve(e.value))),
+		e.stores.useDevelopStore.subscribe((e, t) => {
+			if (e.paramBag === t.paramBag) return;
+			let n = Re(e.paramBag);
+			n && e.setDynParams(n);
+		})
+	];
 }
-function Nt() {
-	let e = Q;
+function Rt() {
+	let e = Ft;
 	if (e) {
-		Q = null;
+		Ft = null;
 		try {
-			for (let e of jt) e();
-			jt = [], $?.unregister(), $ = null, e.unregisterProcessingStage(w);
+			for (let e of It) e();
+			It = [], $?.unregister(), $ = null, e.unregisterProcessingStage(w);
 		} catch (e) {
 			console.warn("[colour-mapping] deactivate failed:", e);
 		}
 	}
 }
 //#endregion
-export { C as EXT_ID, Se as PANEL_ID, Mt as activate, Nt as deactivate };
+export { C as EXT_ID, Se as PANEL_ID, Lt as activate, Rt as deactivate };
 
 //# sourceMappingURL=index.js.map

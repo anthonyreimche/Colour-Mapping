@@ -73,6 +73,8 @@ export interface Rig {
   /** Runs before a capture or render answers, as a photo switch during one would. */
   beforeAnswer: (() => void) | null;
   setSetting(key: string, value: unknown): void;
+  /** Another extension's write to a shared variable (registering it if new). */
+  setVariable(name: string, value: unknown): void;
 }
 
 export const PARAMS = { exposure: 0 } as unknown as DevelopParams;
@@ -96,6 +98,8 @@ export function fakeApi(photos: Partial<CatalogPhoto>[] = [{ id: "photo-1", file
   const notices: Notice[] = [];
   const frames = new Map<string, FloatFrame | null>();
   const sliderProps = new Map<number, SliderProps>();
+  const variables = new Map<string, unknown>();
+  const variableWatchers = new Map<string, Set<(snapshot: { name: string; value: unknown }) => void>>();
   let nextSlider = 0;
 
   const develop = create<FakeDevelop>()((set) => ({
@@ -164,6 +168,10 @@ export function fakeApi(photos: Partial<CatalogPhoto>[] = [{ id: "photo-1", file
         if (!props) throw new Error("a slider without props");
         return props;
       }),
+    setVariable: (name, value) => {
+      variables.set(name, value);
+      for (const watch of variableWatchers.get(name) ?? []) watch({ name, value });
+    },
     setSetting: (key, value) => {
       settings.set(key, value);
       for (const watch of settingWatchers) watch(key, value);
@@ -221,6 +229,15 @@ export function fakeApi(photos: Partial<CatalogPhoto>[] = [{ id: "photo-1", file
       },
     },
     ui,
+    variables: {
+      subscribe: (name: string, watch: (snapshot: { name: string; value: unknown }) => void) => {
+        const held = variableWatchers.get(name) ?? new Set();
+        held.add(watch);
+        variableWatchers.set(name, held);
+        if (variables.has(name)) watch({ name, value: variables.get(name) });
+        return () => void held.delete(watch);
+      },
+    },
     stores: { create, useDevelopStore: develop, useCatalogStore: catalog },
   };
 

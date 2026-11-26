@@ -18,6 +18,11 @@ Needs Safelight 3.2.8 or later.
 3. To match many photos at once, select them in the Library, right-click and
    choose **Match to colour source**.
 
+With [Reference View](https://github.com/anthonyreimche/Reference-View)
+showing a reference photo beside the open one, **Match to reference** does
+both steps at once: it takes the reference, as its saved edit shows it, as the
+colour source and matches the open photo to it.
+
 The source travels with each matched photo's edit, so Copy and Paste
 Settings, presets and exports carry it. A pasted or preset source has no
 effect on a photo until that photo is matched, since the photo's own colours
@@ -33,6 +38,8 @@ have to be analysed first.
 - **Use as source**: analyse this photo as the colour source.
 - **Match to source**: analyse this photo and match it to the colour source.
   Hover it to see which photo that is.
+- **Match to reference**: shown while Reference View shows a reference photo.
+  Use the reference as the colour source and match this photo to it.
 - **Clusters** (1 to 5, default 3): how many clusters of colour to find.
   Changing it clears this photo's source and target and switches the transfer
   off; use it before Use as source.
