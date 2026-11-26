@@ -39,6 +39,7 @@ export function activate(api: SafelightAPI): void {
     title: TITLE,
     component: ColourMappingPanel,
     defaultDock: { module: "develop", direction: "right", width: 268 },
+    modules: ["develop"],
     onReset: resetColourMapping,
     ownsBag: [`${STAGE_ID}.`],
   });

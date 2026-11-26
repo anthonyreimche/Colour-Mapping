@@ -1358,6 +1358,7 @@ function Lt(e) {
 			direction: "right",
 			width: 268
 		},
+		modules: ["develop"],
 		onReset: _t,
 		ownsBag: [`${w}.`]
 	}), e.registerGridMenuItem({
